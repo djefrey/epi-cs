@@ -24,12 +24,12 @@ namespace ecs {
         void addEntity(Entity entity) { _entities.insert(entity); };
         void removeEntity(Entity entity) { _entities.erase(entity); };
 
+        virtual void setSignature(ComponentManager &component) = 0;
         virtual void update(World &world) = 0;
 
         const Signature &getSignature() { return _signature; };
 
         protected:
-        void setSignature(Signature &signature) { _signature = signature; };
     };
 
     class SystemAlreadyExists {};
@@ -43,11 +43,12 @@ namespace ecs {
         template<class T>
         void registerSystem(ComponentManager &component)
         {
-            std::unique_ptr<ASystem> system = std::unique_ptr<ASystem>(new T(component));
+            std::unique_ptr<ASystem> system = std::make_unique<T>();
             SystemHash hash = typeid(system).hash_code();
 
             if (_systems.find(hash) != _systems.end())
                 throw SystemAlreadyExists();
+            system->setSignature(component);
             _systems[hash] = std::move(system);
         }
 

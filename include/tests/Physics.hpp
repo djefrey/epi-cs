@@ -31,7 +31,7 @@ struct Velocity {
 class PhysicsSystem : public ecs::ASystem
 {
     public:
-    PhysicsSystem(ecs::ComponentManager &component)
+    void setSignature(ecs::ComponentManager &component)
     {
         _signature = component.generateSignature<Transform, Velocity>();
     }
