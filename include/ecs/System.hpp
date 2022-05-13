@@ -15,10 +15,17 @@
 namespace ecs {
     class World;
 
+    const std::size_t STAGES_NB = 2;
+    enum Stages {
+        UPDATE,
+        DRAW,
+    };
+
     class ASystem {
         protected:
         std::set<Entity> _entities;
         Signature _signature;
+        Stages _stage = UPDATE;
 
         public:
         void addEntity(Entity entity) { _entities.insert(entity); };
@@ -28,8 +35,7 @@ namespace ecs {
         virtual void update(World &world) = 0;
 
         const Signature &getSignature() { return _signature; };
-
-        protected:
+        Stages getStage() { return _stage; };
     };
 
     class SystemAlreadyExists {};
@@ -37,25 +43,34 @@ namespace ecs {
     class SystemManager {
         using SystemHash = std::size_t;
 
-        std::map<SystemHash, std::unique_ptr<ASystem>> _systems;
+        std::unordered_map<SystemHash, std::unique_ptr<ASystem>> _systems;
+        std::unordered_map<Stages, std::vector<SystemHash>> _stages;
 
         public:
+        SystemManager()
+        {
+            for (std::size_t i = 0; i < STAGES_NB; i++)
+                _stages[(Stages) i] = std::vector<SystemHash>();
+        }
+
         template<class T>
         void registerSystem(ComponentManager &component)
         {
             std::unique_ptr<ASystem> system = std::make_unique<T>();
             SystemHash hash = typeid(system).hash_code();
+            Stages stage = system->getStage();
 
             if (_systems.find(hash) != _systems.end())
                 throw SystemAlreadyExists();
             system->setSignature(component);
             _systems[hash] = std::move(system);
+            _stages[stage].push_back(hash);
         }
 
-        void updateSystems(World &world)
+        void updateStage(World &world, Stages stage)
         {
-            for (auto &pair : _systems)
-                pair.second->update(world);
+            for (SystemHash hash : _stages[stage])
+                _systems[hash]->update(world);
         }
 
         void updateEntitySignature(Entity entity, Signature &signature)

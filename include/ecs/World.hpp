@@ -34,7 +34,10 @@ namespace ecs {
         std::unique_ptr<EntityCommands> spawn();
         std::unique_ptr<EntityCommands> getEntityCommands(Entity entity);
 
-        void update() { _systems.updateSystems(*this); };
+        void update()
+        {
+            _systems.updateStage(*this, UPDATE);
+        }
 
         template<typename T>
         T &getComponent(Entity entity)

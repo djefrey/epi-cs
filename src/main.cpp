@@ -6,7 +6,6 @@
 */
 
 #include <iostream>
-#include "ecs/World.hpp"
 #include "ecs/EntityCommands.hpp"
 
 #include "tests/Physics.hpp"
@@ -20,7 +19,6 @@ int main()
     world.registerSystems<PhysicsSystem>();
     world.getRessourceManager().insertRessource<TestRessource>(42);
     world.spawn()->insert(Transform(), Velocity(1, 1, 1));
-    world.update();
 
     std::cout << world.getRessource<TestRessource>().test << std::endl;
 }
