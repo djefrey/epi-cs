@@ -9,15 +9,7 @@
 
 #include "ecs/System.hpp"
 #include "ecs/World.hpp"
-
-struct Transform {
-    float x;
-    float y;
-    float z;
-
-    Transform() : x(0), y(0), z(0) {};
-    Transform(float x, float y, float z) : x(x), y(y), z(z) {};
-};
+#include "raylib/raylib.h"
 
 struct Velocity {
     float x;
@@ -42,9 +34,9 @@ class PhysicsSystem : public ecs::ASystem
             Transform &transform = world.getComponent<Transform>(entity);
             Velocity &velocity = world.getComponent<Velocity>(entity);
 
-            transform.x += velocity.x;
-            transform.y += velocity.y;
-            transform.z += velocity.z;
+            transform.translation.x += velocity.x;
+            transform.translation.y += velocity.y;
+            transform.translation.z += velocity.z;
         }
     }
 };

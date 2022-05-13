@@ -12,6 +12,7 @@
 #include "Component.hpp"
 #include "System.hpp"
 #include "Ressources.hpp"
+#include "raylib/raylib.h"
 
 namespace ecs {
     class EntityCommands;
@@ -36,7 +37,11 @@ namespace ecs {
 
         void update()
         {
+            ClearBackground(SKYBLUE);
             _systems.updateStage(*this, UPDATE);
+            BeginDrawing();
+            _systems.updateStage(*this, DRAW);
+            EndDrawing();
         }
 
         template<typename T>

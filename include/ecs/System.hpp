@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <iostream>
+
 #include <set>
 #include <vector>
 #include "Entity.hpp"
@@ -57,7 +59,7 @@ namespace ecs {
         void registerSystem(ComponentManager &component)
         {
             std::unique_ptr<ASystem> system = std::make_unique<T>();
-            SystemHash hash = typeid(system).hash_code();
+            SystemHash hash = typeid(T).hash_code();
             Stages stage = system->getStage();
 
             if (_systems.find(hash) != _systems.end())
