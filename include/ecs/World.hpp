@@ -11,6 +11,7 @@
 #include "EntityManager.hpp"
 #include "Component.hpp"
 #include "System.hpp"
+#include "Ressources.hpp"
 
 namespace ecs {
     class EntityCommands;
@@ -19,6 +20,7 @@ namespace ecs {
         EntityManager _entities;
         ComponentManager _components;
         SystemManager _systems;
+        RessourcesManager _ressources;
 
         public:
         World() = default;
@@ -27,6 +29,7 @@ namespace ecs {
         EntityManager &getEntityManager() { return _entities; };
         ComponentManager &getComponentManager() { return _components; };
         SystemManager &getSystemManager() { return _systems; };
+        RessourcesManager &getRessourceManager() { return _ressources; };
 
         std::unique_ptr<EntityCommands> spawn();
         std::unique_ptr<EntityCommands> getEntityCommands(Entity entity);
@@ -37,6 +40,12 @@ namespace ecs {
         T &getComponent(Entity entity)
         {
             return _components.getComponent<T>(entity);
+        }
+
+        template<typename T>
+        T &getRessource()
+        {
+            return _ressources.getRessource<T>();
         }
 
         template<typename T>
