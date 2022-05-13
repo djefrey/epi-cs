@@ -11,6 +11,7 @@
 #include <typeinfo>
 #include <unordered_map>
 #include <array>
+#include <memory>
 
 #include "Entity.hpp"
 
