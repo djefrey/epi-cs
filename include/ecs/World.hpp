@@ -63,7 +63,6 @@ namespace ecs {
             (_components.registerComponent<Ts>(), ...);
         }
 
-
         template<typename T>
         void registerSystem()
         {
@@ -74,6 +73,12 @@ namespace ecs {
         void registerSystems()
         {
             (_systems.registerSystem<Ts>(_components), ...);
+        }
+
+        template<typename T, typename ...Args>
+        void insertRessource(Args... args)
+        {
+            _ressources.insertRessource<T>(args...);
         }
 
         std::deque<Entity> &getLivingEntities()

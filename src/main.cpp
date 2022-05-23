@@ -24,11 +24,11 @@ int main()
     world.registerComponents<Transform, Velocity, DrawableCube>();
     world.registerSystems<PhysicsSystem, DrawCubeSystem>();
 
-    world.getRessourceManager().insertRessource<raylib::Window>();
-    world.getRessourceManager().insertRessource<raylib::Camera>();
-    world.getRessourceManager().insertRessource<raylib::TextureManager>();
-    world.getRessourceManager().insertRessource<raylib::ModelManager>();
-    world.getRessourceManager().insertRessource<raylib::AnimationManager>();
+    world.insertRessource<raylib::Window>();
+    world.insertRessource<raylib::Camera>(Vector3 {0.0, 2.0, -1.0}, Vector3 {0.0, 0.0, 4.0});
+    world.insertRessource<raylib::TextureManager>();
+    world.insertRessource<raylib::ModelManager>();
+    world.insertRessource<raylib::AnimationManager>();
 
 // ---------------------------------
 
