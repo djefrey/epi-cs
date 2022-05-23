@@ -27,7 +27,7 @@ namespace ecs {
         {
             _availableEntities.resize(MAX_ENTITIES);
             for (std::size_t i = 0; i < MAX_ENTITIES; i++)
-                _availableEntities.push_back((Entity) i);
+                _availableEntities[i] = ((Entity) i);
         };
 
         Entity createEntity()

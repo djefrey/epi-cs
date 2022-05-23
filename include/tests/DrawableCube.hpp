@@ -28,6 +28,8 @@ struct DrawableCube {
 
 class DrawCubeSystem : public ecs::ASystem {
     public:
+    DrawCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
+
     void setSignature(ecs::ComponentManager &component)
     {
         _signature = component.generateSignature<Transform, DrawableCube>();
@@ -42,9 +44,7 @@ class DrawCubeSystem : public ecs::ASystem {
             Transform &transform = world.getComponent<Transform>(entity);
             DrawableCube &cube = world.getComponent<DrawableCube>(entity);
 
-            std::cout << "Draw cube ! " << std::endl;
-
-            cube.render(Vector3 { 0, 0, -1 });
+            cube.render(transform.translation);
         }
         camera.end3DMode();
     }

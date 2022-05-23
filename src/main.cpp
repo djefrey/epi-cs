@@ -19,7 +19,9 @@ int main()
     world.registerComponents<Transform, Velocity, DrawableCube>();
     world.registerSystems<PhysicsSystem, DrawCubeSystem>();
     world.getRessourceManager().insertRessource<raylib::Camera>();
-    world.spawn()->insert(Transform { 0, 0, 3 }, Velocity(1, 1, 1), DrawableCube(Vector3 { 1, 1, 1 }, GREEN));
+    world.spawn()->insert(Transform { 0, 0, 0 }, Velocity {0, 0, 0.02}, DrawableCube(Vector3 { 1, 1, 1 }, GREEN));
+    world.spawn()->insert(Transform { 1, 1, 0 }, Velocity {0, 0, 0.1}, DrawableCube(Vector3 { 1, 1, 1 }, RED));
+    world.spawn()->insert(Transform { -1, -1, 0 }, Velocity {0, 0.01, 0}, DrawableCube(Vector3 { 1, 0.5, 1 }, YELLOW));
 
     InitWindow(640, 480, "Epitech Coding Style");
     SetTargetFPS(60);
