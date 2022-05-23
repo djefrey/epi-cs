@@ -1,0 +1,32 @@
+/*
+** EPITECH PROJECT, 2022
+** epi-cs
+** File description:
+** Animation
+*/
+
+#pragma once
+
+#include <string>
+#include "Model.hpp"
+#include "raylib.h"
+
+namespace raylib {
+    using RaylibAnimation = ::ModelAnimation;
+
+    class Animation {
+        RaylibAnimation _anim;
+
+        public:
+        Animation(RaylibAnimation &&animation) : _anim(animation) {};
+        ~Animation() { UnloadModelAnimation(_anim); };
+
+        void update(Model &model, int frame) { UpdateModelAnimation(model.getModel(), _anim, frame); };
+
+        unsigned int getFramesCount() { _anim.frameCount; };
+        unsigned int getBonesCount() { _anim.boneCount; };
+        bool isValid(Model &model) { return IsModelAnimationValid(model.getModel(), _anim); }
+
+        RaylibAnimation &getAnimation() { return _anim; };
+    };
+}
