@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <iostream>
-
 #include <set>
 #include <vector>
 #include "Entity.hpp"
@@ -41,6 +39,7 @@ namespace ecs {
     };
 
     class SystemAlreadyExists {};
+    class SystemDoNotExists {};
 
     class SystemManager {
         using SystemHash = std::size_t;
@@ -67,6 +66,16 @@ namespace ecs {
             system->setSignature(component);
             _systems[hash] = std::move(system);
             _stages[stage].push_back(hash);
+        }
+
+        template<class T>
+        T &getSystem()
+        {
+            SystemHash hash = typeid(T).hash_code();
+
+            if (_systems.find(hash) != _systems.end())
+                throw SystemDoNotExists();
+            return *_systems[hash].get();
         }
 
         void updateStage(World &world, Stages stage)
