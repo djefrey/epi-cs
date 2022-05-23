@@ -32,5 +32,10 @@ namespace raylib {
         {
             return getWindowSize();
         }
+
+        bool shouldClose()
+        {
+            return WindowShouldClose();
+        }
     };
 }

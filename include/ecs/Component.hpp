@@ -154,5 +154,10 @@ namespace ecs {
                 throw UnknownComponent();
             return getComponentArray<T>(_componentTypes[hash])->getComponent(entity);
         }
+
+        IComponentArray *getIComponentArray(ComponentType type)
+        {
+            return _componentsArrays[type].get();
+        }
     };
 }

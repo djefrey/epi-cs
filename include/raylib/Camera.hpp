@@ -20,6 +20,8 @@ namespace raylib {
         Camera(Vector3 position = Vector3{0.0f, 0.0f, 0.0f},
                 Vector3 target =  Vector3{0.0f, 0.0f, 1.0f})
         {
+            _cam.position = position;
+            _cam.target = target;
             _cam.up = Vector3{0.0, 1.0, 0.0};
             _cam.projection = CameraProjection::CAMERA_PERSPECTIVE;
             _cam.fovy = 80.0f;

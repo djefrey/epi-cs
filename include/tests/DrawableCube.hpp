@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Camera.hpp"
+#include "raylib/Camera.hpp"
 #include "ecs/World.hpp"
 #include "ecs/System.hpp"
 #include "raylib/raylib.h"

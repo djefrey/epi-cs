@@ -22,6 +22,7 @@ namespace ecs {
         ComponentManager _components;
         SystemManager _systems;
         RessourcesManager _ressources;
+        std::deque<Entity> _livingEntities;
 
         public:
         World() = default;
@@ -32,17 +33,11 @@ namespace ecs {
         SystemManager &getSystemManager() { return _systems; };
         RessourcesManager &getRessourceManager() { return _ressources; };
 
+        void update();
+        void killAllEntities();
+
         std::unique_ptr<EntityCommands> spawn();
         std::unique_ptr<EntityCommands> getEntityCommands(Entity entity);
-
-        void update()
-        {
-            ClearBackground(SKYBLUE);
-            _systems.updateStage(*this, UPDATE);
-            BeginDrawing();
-            _systems.updateStage(*this, DRAW);
-            EndDrawing();
-        }
 
         template<typename T>
         T &getComponent(Entity entity)
@@ -79,6 +74,11 @@ namespace ecs {
         void registerSystems()
         {
             (_systems.registerSystem<Ts>(_components), ...);
+        }
+
+        std::deque<Entity> &getLivingEntities()
+        {
+            return _livingEntities;
         }
     };
 }

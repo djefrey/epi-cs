@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include "Entity.hpp"
 #include "Component.hpp"
 #include "World.hpp"
@@ -52,7 +53,16 @@ namespace ecs {
 
         void despawn()
         {
+            Signature &sign = _world.getEntityManager().getSignature(_entity);
+            std::deque<Entity> &living = _world.getLivingEntities();
+
+            for (ComponentType i = 0; i < MAX_COMPONENTS; i++) {
+                if (sign[i])
+                    _world.getComponentManager().getIComponentArray(i)->removeEntity(_entity);
+            }
+            _world.getSystemManager().updateEntitySignature(_entity, sign);
             _world.getEntityManager().destroyEntity(_entity);
+            living.erase(std::find(living.begin(), living.end(), _entity));
         }
     };
 }
