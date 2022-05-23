@@ -23,8 +23,8 @@ namespace raylib {
 
         void update(Model &model, int frame) { UpdateModelAnimation(model.getModel(), _anim, frame); };
 
-        unsigned int getFramesCount() { _anim.frameCount; };
-        unsigned int getBonesCount() { _anim.boneCount; };
+        unsigned int getFramesCount() { return _anim.frameCount; };
+        unsigned int getBonesCount() { return _anim.boneCount; };
         bool isValid(Model &model) { return IsModelAnimationValid(model.getModel(), _anim); }
 
         RaylibAnimation &getAnimation() { return _anim; };

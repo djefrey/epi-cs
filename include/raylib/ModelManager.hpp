@@ -19,7 +19,7 @@ namespace raylib {
         {
             if (_models.find(path) == _models.end())
                 _models.insert({path, Model(path)});
-            return _models[path];
+            return _models.at(path);
         }
     };
 }

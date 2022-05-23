@@ -23,7 +23,7 @@ namespace raylib {
             unsigned int animCount = 0;
             ModelAnimation *anims = LoadModelAnimations(path.c_str(), &animCount);
 
-            _animations.insert({ path, std::vector<Animation>() });
+            _animations.insert({path, std::vector<Animation>()});
             for (unsigned int i = 0; i < animCount; i++)
                 _animations[path].push_back(Animation(std::move(anims[i])));
             RL_FREE(anims);
@@ -36,7 +36,7 @@ namespace raylib {
                 loadAnimationFile(path);
             if (index >= _animations[path].size())
                 throw AnimationInvalidIndex();
-            return _animations[path][index];
+            return _animations.at(path)[index];
         }
     };
 }

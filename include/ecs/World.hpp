@@ -36,8 +36,8 @@ namespace ecs {
         void update();
         void killAllEntities();
 
-        std::unique_ptr<EntityCommands> spawn();
-        std::unique_ptr<EntityCommands> getEntityCommands(Entity entity);
+        EntityCommands spawn();
+        EntityCommands getEntityCommands(Entity entity);
 
         template<typename T>
         T &getComponent(Entity entity)

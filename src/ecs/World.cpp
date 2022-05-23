@@ -26,15 +26,15 @@ void ecs::World::killAllEntities()
         EntityCommands(entity, *this).despawn();
 }
 
-std::unique_ptr<ecs::EntityCommands> ecs::World::spawn()
+ecs::EntityCommands ecs::World::spawn()
 {
     Entity entity = _entities.createEntity();
 
     _livingEntities.push_back(entity);
-    return std::make_unique<ecs::EntityCommands>(entity, *this);
+    return ecs::EntityCommands(entity, *this);
 };
 
-std::unique_ptr<ecs::EntityCommands> ecs::World::getEntityCommands(Entity entity)
+ecs::EntityCommands ecs::World::getEntityCommands(Entity entity)
 {
-    return std::make_unique<ecs::EntityCommands>(entity, *this);
+    return ecs::EntityCommands(entity, *this);
 }
