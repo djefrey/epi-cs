@@ -7,32 +7,44 @@
 
 #pragma once
 
-#include "raylib/Camera.hpp"
 #include "ecs/World.hpp"
 #include "ecs/System.hpp"
+#include "raylib/Camera.hpp"
+#include "raylib/Texture.hpp"
 #include "raylib/raylib.h"
+
+using Tint = ::Color;
+
+struct TextureRef {
+    raylib::Texture *texture;
+
+    TextureRef(raylib::Texture *texture = nullptr) : texture(texture) {};
+};
 
 struct DrawableCube {
     Vector3 _size;
-    Color _color;
 
     public:
-    DrawableCube() : _size(Vector3 {1, 1, 1}), _color(RED) {};
-    DrawableCube(Vector3 size, Color color) : _size(size), _color(color) {};
+    DrawableCube(Vector3 size = {1, 1, 1}) : _size(size) {};
 
-    void render(Vector3 pos)
+    void renderColor(Vector3 &pos, Color &color)
     {
-        DrawCube(pos, _size.x, _size.y, _size.z, _color);
+        DrawCube(pos, _size.x, _size.y, _size.z, color);
+    }
+
+    void renderTexture(Vector3 &pos, raylib::Texture &texture)
+    {
+        DrawCubeTexture(texture.getTexture(), pos, _size.x, _size.y, _size.z, WHITE);
     }
 };
 
-class DrawCubeSystem : public ecs::ASystem {
+class DrawColorCubeSystem : public ecs::ASystem {
     public:
-    DrawCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
+    DrawColorCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
 
     void setSignature(ecs::ComponentManager &component)
     {
-        _signature = component.generateSignature<Transform, DrawableCube>();
+        _signature = component.generateSignature<Transform, DrawableCube, Tint>();
     }
 
     void update(ecs::World &world)
@@ -43,8 +55,34 @@ class DrawCubeSystem : public ecs::ASystem {
         for (auto entity : _entities) {
             Transform &transform = world.getComponent<Transform>(entity);
             DrawableCube &cube = world.getComponent<DrawableCube>(entity);
+            Tint &tint = world.getComponent<Tint>(entity);
 
-            cube.render(transform.translation);
+            cube.renderColor(transform.translation, tint);
+        }
+        camera.end3DMode();
+    }
+};
+
+class DrawTextureCubeSystem : public ecs::ASystem {
+    public:
+    DrawTextureCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
+
+    void setSignature(ecs::ComponentManager &component)
+    {
+        _signature = component.generateSignature<Transform, DrawableCube, TextureRef>();
+    }
+
+    void update(ecs::World &world)
+    {
+        raylib::Camera &camera = world.getRessource<raylib::Camera>();
+
+        camera.begin3DMode();
+        for (auto entity : _entities) {
+            Transform &transform = world.getComponent<Transform>(entity);
+            DrawableCube &cube = world.getComponent<DrawableCube>(entity);
+            TextureRef &textRef = world.getComponent<TextureRef>(entity);
+
+            cube.renderTexture(transform.translation, *textRef.texture);
         }
         camera.end3DMode();
     }

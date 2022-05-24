@@ -27,7 +27,7 @@ namespace raylib {
             _cam.fovy = 80.0f;
         };
         Camera(Camera &cam) = delete;
-        Camera(Camera &&cam) : _cam(cam._cam) {};
+        Camera(Camera &&cam) : _cam(cam._cam) { cam._cam = {0}; };
 
         Vector3 getPosition() { return _cam.position; };
         void setPosition(Vector3 pos) { _cam.position = pos; };

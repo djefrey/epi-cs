@@ -20,6 +20,8 @@ namespace raylib {
         public:
         Animation(RaylibAnimation &&animation) : _anim(animation) {};
         ~Animation() { UnloadModelAnimation(_anim); };
+        Animation(Animation &anim) = delete;
+        Animation(Animation &&anim) : _anim(anim._anim) { anim._anim = { 0 }; };
 
         void update(Model &model, int frame) { UpdateModelAnimation(model.getModel(), _anim, frame); };
 
