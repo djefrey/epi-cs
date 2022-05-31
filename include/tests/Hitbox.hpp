@@ -8,7 +8,8 @@
 #pragma once
 
 #include "raylib.h"
-#include "raymath.h"
+#include "raylib/Matrix.hpp"
+#include "raylib/Vectors.hpp"
 
 struct Hitbox
 {
@@ -20,10 +21,11 @@ struct Hitbox
 
     BoundingBox getBoundingBox(Transform &transform)
     {
-        Matrix mat = MatrixTranslate(transform.translation.x, transform.translation.y, transform.translation.z);
-        mat = MatrixMultiply(mat, QuaternionToMatrix(transform.rotation));
-        mat = MatrixMultiply(mat, MatrixScale(transform.scale.x, transform.scale.y, transform.scale.z));
+        raylib::Matrix mat =
+        raylib::Matrix::fromTranslate(transform.translation) *
+        raylib::Matrix::fromQuaternion(transform.rotation) *
+        raylib::Matrix::fromScale(transform.scale);
 
-        return BoundingBox { Vector3Transform(min, mat), Vector3Transform(max, mat) };
+        return BoundingBox { min * mat, max * mat };
     };
 };
