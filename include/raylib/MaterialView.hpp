@@ -21,6 +21,7 @@ namespace raylib {
 
         void setTexture(int mapType, Texture &texture)
         {
+            _mat = LoadMaterialDefault();
             SetMaterialTexture(&_mat, mapType, texture.getTexture());
         }
     };

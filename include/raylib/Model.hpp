@@ -19,9 +19,9 @@ namespace raylib {
 
         public:
         Model(const std::string &path) : _model(LoadModel(path.c_str())) {};
-        ~Model() { UnloadModel(_model); };
+        ~Model() { if (_model.boneCount) UnloadModel(_model); };
         Model(Model &model) = delete;
-        Model(Model &&model) : _model(model._model) { model._model = {0}; };
+        Model(Model &&model) : _model(model._model) { model._model = { 0 }; };
 
         void draw(Vector3 position, float scale = 1.0f, Color tint = {255, 255, 255, 255})
         {

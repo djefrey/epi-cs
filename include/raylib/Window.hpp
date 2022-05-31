@@ -37,5 +37,15 @@ namespace raylib {
         {
             return WindowShouldClose();
         }
+
+        Vector2 getMousePos()
+        {
+            return GetMousePosition();
+        }
+
+        bool isMouseButtonPressed(MouseButton button)
+        {
+            return IsMouseButtonPressed(button);
+        }
     };
 }

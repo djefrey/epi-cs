@@ -11,9 +11,10 @@
 
 void ecs::World::update()
 {
-    ClearBackground(SKYBLUE);
+    _systems.updateStage(*this, INPUT_UPDATE);
     _systems.updateStage(*this, UPDATE);
     BeginDrawing();
+    ClearBackground(SKYBLUE);
     _systems.updateStage(*this, DRAW);
     EndDrawing();
 }

@@ -12,7 +12,11 @@ add_executable(ecs
 )
 
 target_link_libraries(ecs raylib)
-target_include_directories(ecs PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_include_directories(ecs
+    PRIVATE
+        "${CMAKE_SOURCE_DIR}/include"
+        "${raylib_SOURCE_DIR}/"
+)
 set_target_properties(ecs
     PROPERTIES
         CXX_STANDARD 17

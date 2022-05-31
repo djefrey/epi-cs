@@ -10,6 +10,8 @@
 #include "raylib.h"
 #include "raymath.h"
 
+#include "Ray.hpp"
+
 namespace raylib {
     using RaylibCamera = ::Camera3D;
 
@@ -41,6 +43,8 @@ namespace raylib {
 
         void begin3DMode() { BeginMode3D(_cam); }
         void end3DMode() { EndMode3D(); }
+
+        Ray getMouseRay(Vector2 mousePos) { return Ray(GetMouseRay(mousePos, _cam)); };
 
         RaylibCamera &getCamera() { return _cam; };
     };
