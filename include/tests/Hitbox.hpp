@@ -22,9 +22,9 @@ struct Hitbox
     BoundingBox getBoundingBox(Transform &transform)
     {
         raylib::Matrix mat =
-        raylib::Matrix::fromTranslate(transform.translation) *
+        raylib::Matrix::fromScale(transform.scale) *
         raylib::Matrix::fromQuaternion(transform.rotation) *
-        raylib::Matrix::fromScale(transform.scale);
+        raylib::Matrix::fromTranslate(transform.translation);
 
         return BoundingBox { min * mat, max * mat };
     };

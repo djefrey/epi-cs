@@ -22,19 +22,17 @@ struct TextureRef {
 };
 
 struct DrawableCube {
-    Vector3 _size;
-
     public:
-    DrawableCube(Vector3 size = {1, 1, 1}) : _size(size) {};
+    DrawableCube() {};
 
-    void renderColor(Vector3 &pos, Color &color)
+    void renderColor(Transform &transform, Color &color)
     {
-        DrawCube(pos, _size.x, _size.y, _size.z, color);
+        DrawCube(transform.translation, transform.scale.x, transform.scale.y, transform.scale.z, color);
     }
 
-    void renderTexture(Vector3 &pos, raylib::Texture &texture)
+    void renderTexture(Transform &transform, raylib::Texture &texture)
     {
-        DrawCubeTexture(texture.getTexture(), pos, _size.x, _size.y, _size.z, WHITE);
+        DrawCubeTexture(texture.getTexture(), transform.translation, transform.scale.x, transform.scale.y, transform.scale.z, WHITE);
     }
 };
 
@@ -57,7 +55,7 @@ class DrawColorCubeSystem : public ecs::ASystem {
             DrawableCube &cube = world.getComponent<DrawableCube>(entity);
             Tint &tint = world.getComponent<Tint>(entity);
 
-            cube.renderColor(transform.translation, tint);
+            cube.renderColor(transform, tint);
         }
         camera.end3DMode();
     }
@@ -82,7 +80,7 @@ class DrawTextureCubeSystem : public ecs::ASystem {
             DrawableCube &cube = world.getComponent<DrawableCube>(entity);
             TextureRef &textRef = world.getComponent<TextureRef>(entity);
 
-            cube.renderTexture(transform.translation, *textRef.texture);
+            cube.renderTexture(transform, *textRef.texture);
         }
         camera.end3DMode();
     }

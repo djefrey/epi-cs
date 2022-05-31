@@ -34,9 +34,21 @@ namespace raylib {
             return Matrix(MatrixScale(scale.x, scale.y, scale.z));
         }
 
+        Matrix &operator=(const Matrix &other)
+        {
+            _mat = other._mat;
+            return *this;
+        }
+
         Matrix &operator*(const Matrix &other)
         {
             _mat = MatrixMultiply(_mat, other._mat);
+            return *this;
+        }
+
+        Matrix &operator*=(const Matrix &other)
+        {
+            _mat = (*this * other)._mat;
             return *this;
         }
 

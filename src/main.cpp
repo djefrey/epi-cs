@@ -70,12 +70,12 @@ int main()
 
 // ---------------------------------
 
-    world.spawn().insert(Transform { 0, 0, 2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, 0.02}, DrawableCube(Vector3 { 1, 1, 1 }), RED);
-    world.spawn().insert(Transform { 1, 1, 2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, 0.1}, DrawableCube(Vector3 { 1, 1, 1 }), GREEN);
-    world.spawn().insert(Transform { -1, -1, 2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0.01, 0}, DrawableCube(Vector3 { 1, 0.5, 1 }), TextureRef { &woodPlanks });
+    world.spawn().insert(Transform { 0, 0, 2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, 0.02}, DrawableCube {}, RED);
+    world.spawn().insert(Transform { 1, 1, 2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, 0.1}, DrawableCube {}, GREEN);
+    world.spawn().insert(Transform { -1, -1, 2, 0, 0, 0, 0, 1, 0.5, 1 }, Velocity {0, 0.01, 0}, DrawableCube {}, TextureRef { &woodPlanks });
     world.spawn().insert(Transform { 1, 1, 2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, 0.02}, ModelRef { &testModel });
 
-    world.spawn().insert(Transform { 0, 2, 1, 0, 0, 0, 0, 1, 1, 1 }, DrawableCube { Vector3 {0.3, 0.3, 0.3} }, GREEN, Hitbox {{-0.15, -0.15, -0.15}, {0.15, 0.15, 0.15}}, Clickable {testClick}, Hoverable{});
+    world.spawn().insert(Transform { 0, 2, 1, 0, 0, 0, 0, 0.3, 0.3, 0.3 }, DrawableCube {}, GREEN, Hitbox {{-0.5, -0.5, -0.5}, {0.5, 0.5, 0.5}}, Clickable {testClick}, Hoverable{});
 
 // ---------------------------------
 
