@@ -12,14 +12,9 @@
 #include "raylib/Camera.hpp"
 #include "raylib/Texture.hpp"
 #include "raylib/raylib.h"
-
-using Tint = ::Color;
-
-struct TextureRef {
-    raylib::Texture *texture;
-
-    TextureRef(raylib::Texture *texture = nullptr) : texture(texture) {};
-};
+#include "raylib/rlgl.h"
+#include "raylib/Matrix.hpp"
+#include "ColorTexture.hpp"
 
 struct DrawableCube {
     public:
@@ -38,7 +33,7 @@ struct DrawableCube {
 
 class DrawColorCubeSystem : public ecs::ASystem {
     public:
-    DrawColorCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
+    DrawColorCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW_WORLD; };
 
     void setSignature(ecs::ComponentManager &component)
     {
@@ -55,7 +50,10 @@ class DrawColorCubeSystem : public ecs::ASystem {
             DrawableCube &cube = world.getComponent<DrawableCube>(entity);
             Tint &tint = world.getComponent<Tint>(entity);
 
+            rlPushMatrix();
+            rlMultMatrixf(MatrixToFloatV(raylib::Matrix::fromQuaternion(transform.rotation).getMatrix()).v);
             cube.renderColor(transform, tint);
+            rlPopMatrix();
         }
         camera.end3DMode();
     }
@@ -63,7 +61,7 @@ class DrawColorCubeSystem : public ecs::ASystem {
 
 class DrawTextureCubeSystem : public ecs::ASystem {
     public:
-    DrawTextureCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
+    DrawTextureCubeSystem() : ecs::ASystem() { _stage = ecs::DRAW_WORLD; };
 
     void setSignature(ecs::ComponentManager &component)
     {

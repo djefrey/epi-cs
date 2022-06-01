@@ -16,6 +16,8 @@ using Tint = ::Color;
 
 class HoverTintUpdateSystem : public ecs::ASystem {
     public:
+    HoverTintUpdateSystem() { _stage = ecs::Stages::RENDER_UPDATE; };
+
     void setSignature(ecs::ComponentManager &component)
     {
         _signature = component.generateSignature<Tint, Hoverable>();

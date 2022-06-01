@@ -13,7 +13,9 @@
 
 #include "raylib/Window.hpp"
 #include "raylib/Camera.hpp"
+
 #include "Hitbox.hpp"
+#include "2D.hpp"
 
 struct Hoverable {
     bool isHover;
@@ -59,6 +61,44 @@ class HoverUpdateSystem : public ecs::ASystem {
                 hitDist = collision.distance;
                 hitEntity = entity;
             }
+        }
+
+        if (hitHover) {
+            hitHover->isHover = true;
+            hitHover->updated = !hitHover->updated;
+        }
+    }
+};
+
+class Hover2DUpdateSystem : public ecs::ASystem {
+    public:
+    Hover2DUpdateSystem()
+    {
+        _stage = ecs::Stages::INPUT_UPDATE;
+    };
+
+    void setSignature(ecs::ComponentManager &component)
+    {
+        _signature = component.generateSignature<Position2D, Hoverable, Hitbox2D>();
+    }
+
+    void update(ecs::World &world)
+    {
+        raylib::Window &window = world.getRessource<raylib::Window>();
+        Vector2 mousePos = window.getMousePos();
+        Hoverable *hitHover = nullptr;
+
+        for (ecs::Entity entity : _entities) {
+            Position2D &pos = world.getComponent<Position2D>(entity);
+            Hitbox2D &hitbox = world.getComponent<Hitbox2D>(entity);
+            Hoverable &hover = world.getComponent<Hoverable>(entity);
+
+            hover.updated = hover.isHover != false;
+            hover.isHover = false;
+            if (!hitHover
+            && mousePos.x >= pos.x && mousePos.x <= pos.x + hitbox.width
+            && mousePos.y >= pos.y && mousePos.y <= pos.y + hitbox.height)
+                hitHover = &hover;
         }
 
         if (hitHover) {

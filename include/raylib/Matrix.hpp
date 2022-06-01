@@ -19,6 +19,13 @@ namespace raylib {
         Matrix() : _mat(MatrixIdentity()) {};
         Matrix(const RaylibMatrix &mat) : _mat(mat) {};
 
+        static Matrix fromTransform(Transform &transform)
+        {
+            return fromScale(transform.scale) *
+            fromQuaternion(transform.rotation) *
+            fromTranslate(transform.translation);
+        }
+
         static Matrix fromTranslate(Vector3 &translate)
         {
             return Matrix(MatrixTranslate(translate.x, translate.y, translate.z));
@@ -55,6 +62,11 @@ namespace raylib {
         const RaylibMatrix &getMatrix() const
         {
             return _mat;
+        }
+
+        float16 getValues() const
+        {
+            return MatrixToFloatV(_mat);
         }
     };
 }

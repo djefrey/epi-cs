@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "raylib.h"
+#include "raylib/raylib.h"
+#include "raylib/rlgl.h"
 #include "raylib/Model.hpp"
 
 struct ModelRef {
@@ -18,7 +19,7 @@ struct ModelRef {
 
 class DrawableModelSystem : public ecs::ASystem {
     public:
-    DrawableModelSystem() : ecs::ASystem() { _stage = ecs::DRAW; };
+    DrawableModelSystem() : ecs::ASystem() { _stage = ecs::DRAW_WORLD; };
 
     void setSignature(ecs::ComponentManager &component)
     {

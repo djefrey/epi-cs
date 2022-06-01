@@ -15,11 +15,13 @@
 namespace ecs {
     class World;
 
-    const std::size_t STAGES_NB = 3;
+    const std::size_t STAGES_NB = 5;
     enum Stages {
         INPUT_UPDATE,
         UPDATE,
-        DRAW,
+        RENDER_UPDATE,
+        DRAW_WORLD,
+        DRAW_HUD,
     };
 
     class ASystem {

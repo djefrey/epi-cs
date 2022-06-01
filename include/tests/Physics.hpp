@@ -20,9 +20,10 @@ struct Velocity {
     Velocity(float x, float y, float z) : x(x), y(y), z(z) {};
 };
 
-class PhysicsSystem : public ecs::ASystem
-{
+class PhysicsSystem : public ecs::ASystem{
     public:
+    PhysicsSystem() { _stage = ecs::Stages::UPDATE; };
+
     void setSignature(ecs::ComponentManager &component)
     {
         _signature = component.generateSignature<Transform, Velocity>();

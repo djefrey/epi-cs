@@ -13,6 +13,8 @@
 
 #include "raylib/Window.hpp"
 #include "raylib/Camera.hpp"
+
+#include "2D.hpp"
 #include "Hitbox.hpp"
 
 using ClickCallbackFct = void (*)(ecs::World &world, ecs::Entity entity);
@@ -26,10 +28,7 @@ struct Clickable {
 
 class ClickUpdateSystem : public ecs::ASystem {
     public:
-    ClickUpdateSystem()
-    {
-        _stage = ecs::Stages::INPUT_UPDATE;
-    };
+    ClickUpdateSystem() { _stage = ecs::Stages::INPUT_UPDATE; };
 
     void setSignature(ecs::ComponentManager &component)
     {
@@ -65,5 +64,36 @@ class ClickUpdateSystem : public ecs::ASystem {
 
         if (hitClick)
             hitClick->callback(world, hitEntity);
+    }
+};
+
+class Click2DUpdateSystem : public ecs::ASystem {
+    public:
+    Click2DUpdateSystem() { _stage = ecs::Stages::INPUT_UPDATE; };
+
+    void setSignature(ecs::ComponentManager &component)
+    {
+        _signature = component.generateSignature<Position2D, Clickable, Hitbox2D>();
+    }
+
+    void update(ecs::World &world)
+    {
+        raylib::Window &window = world.getRessource<raylib::Window>();
+
+        if (!window.isMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            return;
+
+        Vector2 mousePos = window.getMousePos();
+
+        for (ecs::Entity entity : _entities) {
+            Position2D &pos = world.getComponent<Position2D>(entity);
+            Hitbox2D &hitbox = world.getComponent<Hitbox2D>(entity);
+
+            if (mousePos.x >= pos.x && mousePos.x <= pos.x + hitbox.width
+            && mousePos.y >= pos.y && mousePos.y <= pos.y + hitbox.height) {
+                world.getComponent<Clickable>(entity).callback(world, entity);
+                return;
+            }
+        }
     }
 };
