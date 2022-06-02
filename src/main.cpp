@@ -9,62 +9,77 @@
 #include <fstream>
 #include <sstream>
 
-#include "ecs/EntityCommands.hpp"
+#include "ecs/engine/EntityCommands.hpp"
 
 #include "raylib/Camera.hpp"
 #include "raylib/Window.hpp"
+
 #include "raylib/TextureManager.hpp"
 #include "raylib/ModelManager.hpp"
 #include "raylib/AnimationManager.hpp"
 #include "raylib/FontManager.hpp"
 
-#include "tests/Physics.hpp"
-#include "tests/DrawableCube.hpp"
-#include "tests/DrawableModel.hpp"
-#include "tests/Hitbox.hpp"
-#include "tests/Clickable.hpp"
-#include "tests/Hoverable.hpp"
-#include "tests/HoverTint.hpp"
-#include "tests/2D.hpp"
-#include "tests/Text3D.hpp"
+#include "ecs/components/DrawableCube.hpp"
+#include "ecs/components/DrawableModel.hpp"
+#include "ecs/components/Hitbox.hpp"
+#include "ecs/components/Clickable.hpp"
+#include "ecs/components/Hoverable.hpp"
+#include "ecs/components/HoverTint.hpp"
+#include "ecs/components/Text3D.hpp"
+#include "ecs/components/ColorTexture.hpp"
 
-// #include "JSONParser.hpp"
-
-void testClick(ecs::World &world, ecs::Entity entity)
+void registerBasicComponents(ecs::World &world)
 {
-    puts("CLICK !");
-    world.getComponent<Tint>(entity) = RED;
+    world.registerComponents<Transform, ecs::Hitbox>();
 }
 
-void registerPhysics(ecs::World &world)
+void registerRender(ecs::World &world)
 {
-    world.registerComponent<Velocity>();
-    world.registerSystem<PhysicsSystem>();
+    world.registerComponents<ecs::DrawableCube, ecs::Tint, ecs::TextureRef>();
+    world.registerSystem<ecs::DrawTextureCubeSystem>();
+
+    world.registerComponent<ecs::ModelRef>();
+    world.registerSystem<ecs::DrawableModelSystem>();
+
+    world.registerComponents<ecs::Text3D, ecs::FontRef>();
+    world.registerSystem<ecs::Draw3DTextSystem>();
 }
 
 void registerMouseInputs(ecs::World &world)
 {
-    world.registerComponents<Clickable, Hoverable>();
-    world.registerSystems<ClickUpdateSystem, HoverUpdateSystem, HoverTintUpdateSystem>();
+    world.registerComponents<ecs::Clickable, ecs::Hoverable>();
+    world.registerSystems<ecs::ClickUpdateSystem, ecs::HoverUpdateSystem, ecs::HoverTintUpdateSystem>();
 }
 
-void register2D(ecs::World &world)
+void testClick(ecs::World &world, ecs::Entity entity)
 {
-    world.registerComponents<Position2D, Hitbox2D, Text2D, Button2D>();
-    world.registerSystems<Hover2DUpdateSystem, Click2DUpdateSystem, DrawTextSystem, DrawButtonSystem>();
+    puts("CLICK !");
+    world.getComponent<ecs::Tint>(entity) = RED;
+}
+
+void spawnButton(Vector3 pos, Vector3 rot, std::string text, float buttonSize, float textOffset, ecs::World &world)
+{
+    Quaternion quat = QuaternionFromEuler(rot.x, rot.y, rot.z);
+    Transform transform = {pos, quat, {1, 1, 1}};
+    raylib::Font &font = world.getRessource<raylib::FontManager>().loadFont("./assets/fonts/emulogic.ttf");
+    raylib::Texture &woodPlanks = world.getRessource<raylib::TextureManager>().loadTexture("./assets/textures/planks.png");
+
+    world.spawn().insert(transform,
+    ecs::Text3D {text, BLACK, {textOffset, -0.125, 0}, 12}, ecs::FontRef {&font},
+    ecs::DrawableCube {{0, 0, -0.1}, {buttonSize, 0.8, 0.1}}, ecs::TextureRef {&woodPlanks}, WHITE,
+    ecs::Hitbox{{-buttonSize / 2, -0.4, -0.05}, {buttonSize / 2, 0.4, 0.05}},
+    ecs::Hoverable {}, ecs::Clickable {testClick});
 }
 
 int main()
 {
-    // std::ifstream file("test.json");
-    // std::stringstream buf;
-    // buf << file.rdbuf();
-    // json::JSONParser parser(buf.str());
-    // json::JSONObject root = parser.getRoot();
-
-    // std::cout << "Name: " << root.getString("name") << std::endl;
-
     ecs::World world{};
+
+    registerBasicComponents(world);
+    registerRender(world);
+    registerMouseInputs(world);
+
+// ---------------------------------
 
     world.insertRessource<raylib::Window>();
     world.insertRessource<raylib::Camera>(Vector3 {0.0, 2.0, 2.0}, Vector3 {0.0, 0.0, -4.0});
@@ -75,45 +90,8 @@ int main()
 
 // ---------------------------------
 
-    world.registerComponents<Transform, DrawableCube, Tint, TextureRef, ModelRef, Hitbox>();
-    world.registerSystems<DrawColorCubeSystem, DrawTextureCubeSystem, DrawableModelSystem>();
-
-    registerPhysics(world);
-    registerMouseInputs(world);
-    register2D(world);
-
-    world.registerComponents<Text3D, FontRef>();
-    world.registerSystem<Draw3DTextSystem>();
-
-// ---------------------------------
-
-    raylib::TextureManager &textManager = world.getRessource<raylib::TextureManager>();
-    raylib::Texture &woodPlanks = textManager.loadTexture("./assets/textures/planks.png");
-
-    raylib::ModelManager &modelManager = world.getRessource<raylib::ModelManager>();
-    // raylib::Model &testModel = modelManager.loadModel("./assets/models/ecs-test.gltf");
-    // // testModel.getMaterialView(0).setTexture(MATERIAL_MAP_DIFFUSE, woodPlanks);
-    // testModel.getMaterialView(1).setTexture(MATERIAL_MAP_DIFFUSE, woodPlanks);
-    // testModel.getMaterialView(2).setTexture(MATERIAL_MAP_DIFFUSE, woodPlanks);
-
-    printf("Wood planks : %i\n", woodPlanks.getTexture().id);
-
-    // raylib::AnimationManager &animManager = world.getRessource<raylib::AnimationManager>();
-    // animManager.loadAnimation("")
-
-// ---------------------------------
-
-    world.spawn().insert(Transform { 0, 0, -2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, -0.02}, DrawableCube {}, RED);
-    world.spawn().insert(Transform { 1, 1, -2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, -0.1}, DrawableCube {}, GREEN);
-    world.spawn().insert(Transform { -1, -1, -2, 0, 0, 0, 0, 1, 0.5, 1 }, Velocity {0, 0.01, 0}, DrawableCube {}, TextureRef { &woodPlanks });
-    // world.spawn().insert(Transform { 1, 1, -2, 0, 0, 0, 0, 1, 1, 1 }, Velocity {0, 0, -0.02}, ModelRef { &testModel });
-
-    world.spawn().insert(Transform { 0, 2, -1, 0, 0, 0, 0, 0.3, 0.3, 0.3 }, Velocity {0, 0, 0}, DrawableCube {}, GREEN)
-    .insert(Hitbox {{-0.5, -0.5, -0.5}, {0.5, 0.5, 0.5}}, Hoverable {}, Clickable { testClick });
-
-    raylib::Font font{GetFontDefault()};
-
-    world.spawn().insert(Transform { 1, 1, -2, 0, 0, 0, 0, 1, 1, 1}, Text3D { "Test", WHITE }, FontRef {&font});
+    spawnButton({1, 0, -2}, {0, 0, 0}, "Test", 3, -0.5, world);
+    spawnButton({-2, 1, -2}, {0.5, 0, 0}, "Test 2", 4, -0.8, world);
 
 // ---------------------------------
 

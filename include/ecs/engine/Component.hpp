@@ -73,6 +73,11 @@ namespace ecs {
                 throw EnityDoNotHaveComponent();
             return _components[_entityToIndex[entity]];
         }
+
+        bool isEntityRegistered(Entity entity)
+        {
+            return _entityToIndex.find(entity) != _entityToIndex.end();
+        }
     };
 
     class ComponentManager {
@@ -153,6 +158,16 @@ namespace ecs {
             if (_componentTypes.find(hash) == _componentTypes.end())
                 throw UnknownComponent();
             return getComponentArray<T>(_componentTypes[hash])->getComponent(entity);
+        }
+
+        template<typename T>
+        bool hasComponent(Entity entity)
+        {
+            ComponentHash hash = typeid(T).hash_code();
+
+            if (_componentTypes.find(hash) == _componentTypes.end())
+                throw UnknownComponent();
+            return getComponentArray<T>(_componentTypes[hash])->isEntityRegistered(entity);
         }
 
         IComponentArray *getIComponentArray(ComponentType type)

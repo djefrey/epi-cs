@@ -10,17 +10,17 @@
 #include "Matrix.hpp"
 #include "raymath.h"
 
-Vector3 operator+(Vector3 lhs, const Vector3 &rhs)
+inline Vector3 operator+(Vector3 lhs, const Vector3 &rhs)
 {
     return Vector3Add(lhs, rhs);
 }
 
-Vector3 operator-(Vector3 lhs, const Vector3 &rhs)
+inline Vector3 operator-(Vector3 lhs, const Vector3 &rhs)
 {
     return Vector3Subtract(lhs, rhs);
 }
 
-Vector3 operator*(Vector3 lhs, const raylib::Matrix &mat)
+inline Vector3 operator*(Vector3 lhs, const raylib::Matrix &mat)
 {
     return Vector3Transform(lhs, mat.getMatrix());
 }

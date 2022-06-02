@@ -8,7 +8,14 @@ find_package(raylib REQUIRED)
 
 add_executable(ecs
     "src/main.cpp"
+
     "src/ecs/World.cpp"
+
+    "src/ecs/systems/ClickUpdate.cpp"
+    "src/ecs/systems/DrawCube.cpp"
+    "src/ecs/systems/DrawModel.cpp"
+    "src/ecs/systems/Hoverable.cpp"
+    "src/ecs/systems/Text3D.cpp"
 )
 
 target_link_libraries(ecs raylib)

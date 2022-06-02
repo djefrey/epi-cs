@@ -46,6 +46,12 @@ namespace ecs {
         }
 
         template<typename T>
+        bool hasComponent(Entity entity)
+        {
+            return _components.hasComponent<T>(entity);
+        }
+
+        template<typename T>
         T &getRessource()
         {
             return _ressources.getRessource<T>();

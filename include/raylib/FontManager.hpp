@@ -15,7 +15,7 @@ namespace raylib {
         std::unordered_map<std::string, Font> _fonts;
 
         public:
-        Font &LoadFont(const std::string &path)
+        Font &loadFont(const std::string &path)
         {
             if (_fonts.find(path) == _fonts.end())
                 _fonts.insert({path, Font(path)});

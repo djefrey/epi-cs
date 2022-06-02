@@ -6,8 +6,8 @@
 */
 
 #include <iostream>
-#include "ecs/World.hpp"
-#include "ecs/EntityCommands.hpp"
+#include "ecs/engine/World.hpp"
+#include "ecs/engine/EntityCommands.hpp"
 
 void ecs::World::update()
 {
