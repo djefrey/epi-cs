@@ -29,10 +29,10 @@ namespace raylib {
     inline void rlCheckRenderBatchLimit(int nb) { ::rlCheckRenderBatchLimit(nb); };
     inline void rlSetTexture(int texture) { ::rlSetTexture(texture); };
 
-    inline void rlColor4ub(Color color) { ::rlColor4ub(color.r, color.g, color.b, color.a); };
+    inline void rlColor4ub(const Color &color) { ::rlColor4ub(color.r, color.g, color.b, color.a); };
 
-    inline void rlNormal3f(Vector3 vec) { ::rlNormal3f(vec.x, vec.y, vec.z); };
+    inline void rlNormal3f(const Vector3 &vec) { ::rlNormal3f(vec.x, vec.y, vec.z); };
 
-    inline void rlTexCoord2f(Vector2 uv) { ::rlTexCoord2f(uv.x, uv.y); };
-    inline void rlVertex3f(Vector3 pos) { ::rlVertex3f(pos.x, pos.y, pos.z); };
+    inline void rlTexCoord2f(const Vector2 &uv) { ::rlTexCoord2f(uv.x, uv.y); };
+    inline void rlVertex3f(const Vector3 &pos) { ::rlVertex3f(pos.x, pos.y, pos.z); };
 };
