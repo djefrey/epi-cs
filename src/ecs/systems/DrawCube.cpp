@@ -38,7 +38,8 @@ void ecs::DrawTextureCubeSystem::update(ecs::World &world)
         Transform &transform = world.getComponent<Transform>(entity);
         DrawableCube &cube = world.getComponent<DrawableCube>(entity);
         TextureRef &textRef = world.getComponent<TextureRef>(entity);
-        raylib::Matrix mat = raylib::Matrix::fromTransform(transform);
+        raylib::Matrix mat = raylib::Matrix::fromTransform(transform)
+        * raylib::Matrix::fromTranslate(cube.offset);
         Tint tint = WHITE;
 
         if (world.hasComponent<Tint>(entity))

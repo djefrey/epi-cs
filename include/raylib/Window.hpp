@@ -28,6 +28,11 @@ namespace raylib {
             SetTargetFPS(fps);
         }
 
+        void resize(Vector2 size)
+        {
+            SetWindowSize(size.x, size.y);
+        }
+
         Vector2 getWindowSize()
         {
             return getWindowSize();
