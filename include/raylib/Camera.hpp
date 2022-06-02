@@ -7,10 +7,8 @@
 
 #pragma once
 
-#include "raylib.h"
-#include "raymath.h"
-
 #include "Ray.hpp"
+#include "Vectors.hpp"
 
 namespace raylib {
     using RaylibCamera = ::Camera3D;
@@ -33,11 +31,11 @@ namespace raylib {
 
         Vector3 getPosition() { return _cam.position; };
         void setPosition(Vector3 pos) { _cam.position = pos; };
-        void move(Vector3 vec) { _cam.position = Vector3Add(_cam.position, vec); }
+        void move(Vector3 vec) { _cam.position += (_cam.position, vec); }
 
         Vector3 getTarget() { return _cam.target; };
         void setTarget(Vector3 target) { _cam.target = target; };
-        void moveTarget(Vector3 vec) { _cam.target = Vector3Add(_cam.target, vec); }
+        void moveTarget(Vector3 vec) { _cam.target += (_cam.target, vec); }
 
         void setFOV(float fov) { _cam.fovy = fov; };
 

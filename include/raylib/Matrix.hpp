@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "raymath.h"
+#include "headers/raymath.h"
 
 namespace raylib {
     using RaylibMatrix = ::Matrix;

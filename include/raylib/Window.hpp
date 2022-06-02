@@ -8,7 +8,7 @@
 #pragma once
 
 #include <string>
-#include "raylib.h"
+#include "headers/raylib.h"
 
 namespace raylib {
     class Window {
@@ -46,6 +46,21 @@ namespace raylib {
         bool isMouseButtonPressed(MouseButton button)
         {
             return IsMouseButtonPressed(button);
+        }
+
+        void beginDrawing()
+        {
+            BeginDrawing();
+        }
+
+        void endDrawing()
+        {
+            EndDrawing();
+        }
+
+        void clear(Color color)
+        {
+            ClearBackground(color);
         }
     };
 }

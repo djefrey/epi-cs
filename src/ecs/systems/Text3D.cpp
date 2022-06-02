@@ -7,11 +7,9 @@
 
 #include "ecs/components/Text3D.hpp"
 
-#include "raylib.h"
-#include "rlgl.h"
-
 #include "raylib/Camera.hpp"
 #include "raylib/Matrix.hpp"
+#include "raylib/GL.hpp"
 
 void ecs::Draw3DTextSystem::drawText3D(const std::string &str, raylib::Font &font, float fontSize, float fontSpacing, Color color)
 {
@@ -57,46 +55,45 @@ void ecs::Draw3DTextSystem::drawTextCodepoint3D(int codepoint, raylib::Font &fon
     float tw = (srcRec.x + srcRec.width) / (float) texture.getWidth();
     float th = srcRec.y / (float) texture.getHeight();
 
-    rlCheckRenderBatchLimit(8);
-    rlSetTexture(texture.getTexture().id);
+    raylib::rlCheckRenderBatchLimit(8);
+    raylib::rlSetTexture(texture.getTexture().id);
 
-    rlPushMatrix();
-    rlBegin(RL_QUADS);
+    raylib::RlMatrixPush push;
+    raylib::rlBegin(RL_QUADS);
 
-    rlColor4ub(color.r, color.g, color.b, color.a);
+    raylib::rlColor4ub({color.r, color.g, color.b, color.a});
 
-    rlNormal3f(0.0f, 0.0f, 1.0f);
+    raylib::rlNormal3f({0.0f, 0.0f, 1.0f});
 
-    rlTexCoord2f(tx, ty);
-    rlVertex3f(offset, 0, 0);
+    raylib::rlTexCoord2f({tx, ty});
+    raylib::rlVertex3f({offset, 0, 0});
 
-    rlTexCoord2f(tx, th);
-    rlVertex3f(offset, height, 0);
+    raylib::rlTexCoord2f({tx, th});
+    raylib::rlVertex3f({offset, height, 0});
 
-    rlTexCoord2f(tw, th);
-    rlVertex3f(offset + width, height, 0);
+    raylib::rlTexCoord2f({tw, th});
+    raylib::rlVertex3f({offset + width, height, 0});
 
-    rlTexCoord2f(tw, ty);
-    rlVertex3f(offset + width, 0, 0);
+    raylib::rlTexCoord2f({tw, ty});
+    raylib::rlVertex3f({offset + width, 0, 0});
 
-    rlNormal3f(0.0f, 0.0f, -1.0f);
+    raylib::rlNormal3f({0.0f, 0.0f, -1.0f});
 
-    rlTexCoord2f(tx, ty);
-    rlVertex3f(offset, 0, 0);
+    raylib::rlTexCoord2f({tx, ty});
+    raylib::rlVertex3f({offset, 0, 0});
 
-    rlTexCoord2f(tw, ty);
-    rlVertex3f(offset + width, 0, 0);
+    raylib::rlTexCoord2f({tw, ty});
+    raylib::rlVertex3f({offset + width, 0, 0});
 
-    rlTexCoord2f(tw, th);
-    rlVertex3f(offset + width, height, 0);
+    raylib::rlTexCoord2f({tw, th});
+    raylib::rlVertex3f({offset + width, height, 0});
 
-    rlTexCoord2f(tx, th);
-    rlVertex3f(offset, height, 0);
+    raylib::rlTexCoord2f({tx, th});
+    raylib::rlVertex3f({offset, height, 0});
 
-    rlEnd();
-    rlPopMatrix();
+    raylib::rlEnd();
 
-    rlSetTexture(0);
+    raylib::rlSetTexture(0);
 }
 
 void ecs::Draw3DTextSystem::setSignature(ecs::ComponentManager &component)
@@ -115,10 +112,9 @@ void ecs::Draw3DTextSystem::update(ecs::World &world)
         FontRef &font = world.getComponent<FontRef>(entity);
         raylib::Matrix mat = raylib::Matrix::fromTransform(transform) * raylib::Matrix::fromTranslate(text.offset);
 
-        rlPushMatrix();
-        rlMultMatrixf(mat.getValues().v);
+        raylib::RlMatrixPush push;
+        raylib::rlMultMatrix(mat);
         drawText3D(text.text, *font.font, text.fontSize, text.fontSpacing, text.color);
-        rlPopMatrix();
     }
     cam.end3DMode();
 }

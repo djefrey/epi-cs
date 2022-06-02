@@ -12,7 +12,6 @@
 #include "Component.hpp"
 #include "System.hpp"
 #include "Ressources.hpp"
-#include "raylib/raylib.h"
 
 namespace ecs {
     class EntityCommands;

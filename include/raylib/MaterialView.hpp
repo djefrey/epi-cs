@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "raylib.h"
+#include "headers/raylib.h"
 #include "Texture.hpp"
 
 namespace raylib {

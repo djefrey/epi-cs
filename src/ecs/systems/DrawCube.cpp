@@ -10,9 +10,9 @@
 
 #include "raylib/Camera.hpp"
 #include "raylib/Texture.hpp"
-#include "raylib/raylib.h"
-#include "raylib/rlgl.h"
 #include "raylib/Matrix.hpp"
+#include "raylib/GL.hpp"
+#include "raylib/headers/raylib.h"
 
 void ecs::DrawableCube::renderColor(Color &color)
 {
@@ -43,10 +43,9 @@ void ecs::DrawTextureCubeSystem::update(ecs::World &world)
 
         if (world.hasComponent<Tint>(entity))
             tint = world.getComponent<Tint>(entity);
-        rlPushMatrix();
-        rlMultMatrixf(mat.getValues().v);
+        raylib::RlMatrixPush push;
+        raylib::rlMultMatrix(mat);
         cube.renderTexture(*textRef.texture, tint);
-        rlPopMatrix();
     }
     camera.end3DMode();
 }

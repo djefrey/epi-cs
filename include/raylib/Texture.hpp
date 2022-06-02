@@ -9,7 +9,7 @@
 
 #include <string>
 #include <stdexcept>
-#include "raylib.h"
+#include "headers/raylib.h"
 
 namespace raylib {
     using RaylibTexture = ::Texture2D;

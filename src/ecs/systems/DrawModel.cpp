@@ -8,10 +8,9 @@
 #include "ecs/components/DrawableModel.hpp"
 #include "ecs/components/ColorTexture.hpp"
 
-#include "raylib/raylib.h"
-#include "raylib/rlgl.h"
 #include "raylib/Camera.hpp"
 #include "raylib/Matrix.hpp"
+#include "raylib/GL.hpp"
 
 void ecs::DrawableModelSystem::setSignature(ComponentManager &component)
 {
@@ -31,10 +30,9 @@ void ecs::DrawableModelSystem::update(ecs::World &world)
 
         if (world.hasComponent<Tint>(entity))
             tint = world.getComponent<Tint>(entity);
-        rlPushMatrix();
-        rlMultMatrixf(mat.getValues().v);
+        raylib::RlMatrixPush push;
+        raylib::rlMultMatrix(mat);
         modelRef.model->draw({0}, 1.0f, tint);
-        rlPopMatrix();
     }
     camera.end3DMode();
 }

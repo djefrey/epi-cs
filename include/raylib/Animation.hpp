@@ -9,7 +9,7 @@
 
 #include <string>
 #include "Model.hpp"
-#include "raylib.h"
+#include "headers/raylib.h"
 
 namespace raylib {
     using RaylibAnimation = ::ModelAnimation;

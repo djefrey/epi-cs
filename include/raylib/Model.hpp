@@ -8,8 +8,8 @@
 #pragma once
 
 #include <string>
+#include "headers/raylib.h"
 #include "MaterialView.hpp"
-#include "raylib.h"
 
 namespace raylib {
     using RaylibModel = ::Model;

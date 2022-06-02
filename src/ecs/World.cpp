@@ -8,17 +8,20 @@
 #include <iostream>
 #include "ecs/engine/World.hpp"
 #include "ecs/engine/EntityCommands.hpp"
+#include "raylib/Window.hpp"
 
 void ecs::World::update()
 {
+    raylib::Window &window = getRessource<raylib::Window>();
+
     _systems.updateStage(*this, INPUT_UPDATE);
     _systems.updateStage(*this, UPDATE);
     _systems.updateStage(*this, RENDER_UPDATE);
-    BeginDrawing();
-    ClearBackground(SKYBLUE);
+    window.beginDrawing();
+    window.clear(SKYBLUE);
     _systems.updateStage(*this, DRAW_WORLD);
     _systems.updateStage(*this, DRAW_HUD);
-    EndDrawing();
+    window.endDrawing();
 }
 
 void ecs::World::killAllEntities()
